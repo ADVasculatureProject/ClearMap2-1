@@ -52,18 +52,6 @@ if __name__ == '__main__':
   ws.info()
   
   
-  #%% Initialize alignment 
-  
-  #init atals and reference files
-  annotation_file, reference_file, distance_file=ano.prepare_annotation_files(
-      slicing=(slice(None),slice(None),slice(0,246)), orientation=(1,-2,3),
-      overwrite=False, verbose=True);
-  
-  #alignment parameter files    
-  align_channels_affine_file   = io.join(resources_directory, 'Alignment/align_affine.txt')
-  align_reference_affine_file  = io.join(resources_directory, 'Alignment/align_affine.txt')
-  align_reference_bspline_file = io.join(resources_directory, 'Alignment/align_bspline.txt')
-  
   
   #%%############################################################################
   ### Tile conversion
@@ -78,7 +66,20 @@ if __name__ == '__main__':
              
   io.convert_files(ws.file_list('arteries', extension='tif'), extension='npy', 
                    processes=12, verbose=True);                 
-                   
+
+  # for *.raw files from the mesoSPIM
+  
+  # fileList_channel1 = ws.file_list('raw', extension='raw')
+  # for file in fileList_channel1:
+  #   a = np.memmap(file,dtype="<i2",mode='r', shape =(2048,2048,3499),order='F')
+  #   np.save(file[:-4]+'.npy', a)
+   
+  # fileList_channel2 = ws.file_list('arteries', extension='raw')
+  # for file in fileList_channel2:
+  #   a = np.memmap(file,dtype="<i2",mode='r', shape =(2048,2048,3499),order='F')
+  #   np.save(file[:-4]+'.npy', a)
+
+                     
   
   #%%############################################################################
   ### Stitching
@@ -173,42 +174,7 @@ if __name__ == '__main__':
   
   #p3d.plot([ws.filename('resampled'), ws.filename('resampled', postfix='autofluorescence')])
   
-  #%% Aignment - resampled to autofluorescence
-  
-  # align the two channels
-  align_channels_parameter = {            
-      #moving and reference images
-      "moving_image" : ws.filename('resampled', postfix='autofluorescence'),
-      "fixed_image"  : ws.filename('resampled'),
-      
-      #elastix parameter files for alignment
-      "affine_parameter_file"  : align_channels_affine_file,
-      "bspline_parameter_file" : None,
-      
-      #directory of the alig'/home/nicolas.renier/Documents/ClearMap_Ressources/Par0000affine.txt',nment result
-      "result_directory" :  ws.filename('elastix_resampled_to_auto')
-      }; 
-  
-  elx.align(**align_channels_parameter);
-  
-  #%% Alignment - autoflourescence to reference
-  
-  # align autofluorescence to reference
-  align_reference_parameter = {            
-      #moving and reference images
-      "moving_image" : reference_file,
-      "fixed_image"  : ws.filename('resampled', postfix='autofluorescence'),
-      
-      #elastix parameter files for alignment
-      "affine_parameter_file"  :  align_reference_affine_file,
-      "bspline_parameter_file" :  align_reference_bspline_file,
-      #directory of the alignment result
-      "result_directory" :  ws.filename('elastix_auto_to_reference')
-      };
-  
-  elx.align(**align_reference_parameter);
-  
-  
+
   #%%############################################################################
   ### Create test data
   ###############################################################################
