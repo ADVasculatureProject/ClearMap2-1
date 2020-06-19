@@ -23,6 +23,11 @@ __copyright__ = 'Copyright © 2020 by Christoph Kirst'
 __webpage__   = 'http://idisco.info'
 __download__  = 'http://www.github.com/ChristophKirst/ClearMap2'
 
+import os 
+
+os.chdir('/home/athena-admin/Desktop/git_env_new/ClearMap2-Athena')
+
+
 if __name__ == '__main__':
 
   #%%############################################################################
