@@ -1,14 +1,6 @@
 ClearMap on Athena
 ========
 
-
-<p align="center">
-<img src="https://christophkirst.github.io/ClearMap2Documentation/images/TubeMap_graph_movie.gif" height="160">
-<img src="https://christophkirst.github.io/ClearMap2Documentation/images/CellMap_raw_movie.gif" height="160">
-<img src="https://christophkirst.github.io/ClearMap2Documentation/images/TubeMap_raw_movie.gif" height="160">
-</p>
-
-
 *ClearMap* is a toolbox for the analysis and registration of volumetric
 data from cleared tissues.
 
