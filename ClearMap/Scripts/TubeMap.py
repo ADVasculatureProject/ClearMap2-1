@@ -39,12 +39,12 @@ if __name__ == '__main__':
   from ClearMap.Environment import *  #analysis:ignore
   
   #directories and files
-  directory = '/home/ckirst/Programs/ClearMap2/ClearMap/Tests/Data/TubeMap_Example'    
-  
-  expression_raw      = 'Raw/20-54-41_acta2_555-podo_cd31l_647_UltraII[<Y,2> x <X,2>]_C00_UltraII Filter0001.ome.npy'          
-  expression_arteries = 'Raw/20-54-41_acta2_555-podo_cd31l_647_UltraII[<Y,2> x <X,2>]_C00_UltraII Filter0000.ome.npy'       
-  expression_auto     = 'Autofluorescence/19-44-05_auto_UltraII_C00_xyz-Table Z<Z,4>.ome.tif'  
-  
+  directory = '/media/athena-admin/disk12_1/raw/osfstorage/Brain-39L/excerpt2x1'
+ 
+  expression_raw      = '14-16-41_tricocktail_UltraII[<Y,2> x <X,2>]_C00_UltraII Filter0000.ome.npy'
+  expression_arteries = '14-16-41_tricocktail_UltraII[<Y,2> x <X,2>]_C00_UltraII Filter0001.ome.npy'
+  expression_auto     = ''#'Autofluorescence/14-02-13_auto_UltraII_C00_xyz-Table Z<Z,4>.ome.tif'
+   
   resources_directory = settings.resources_path
   
   ws = wsp.Workspace('TubeMap', directory=directory);
