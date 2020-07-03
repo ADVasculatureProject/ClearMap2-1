@@ -67,12 +67,12 @@ import ClearMap.ImageProcessing.Skeletonization.SkeletonProcessing as skp
 import ClearMap.ImageProcessing.MachineLearning.VesselFilling.VesselFilling as vf
 
 #analysis
-import ClearMap.Analysis.Graphs.GraphGt as grp
-import ClearMap.Analysis.Graphs.GraphProcessing as gp
+#import ClearMap.Analysis.Graphs.GraphGt as grp
+#import ClearMap.Analysis.Graphs.GraphProcessing as gp
 
-import ClearMap.Analysis.Measurements.MeasureExpression as me
-import ClearMap.Analysis.Measurements.MeasureRadius as mr
-import ClearMap.Analysis.Measurements.Voxelization as vox
+#import ClearMap.Analysis.Measurements.MeasureExpression as me
+#import ClearMap.Analysis.Measurements.MeasureRadius as mr
+#import ClearMap.Analysis.Measurements.Voxelization as vox
 
 # experts
 import ClearMap.ImageProcessing.Experts.Vasculature as vasc
@@ -82,10 +82,16 @@ import ClearMap.ImageProcessing.Experts.Cells as cells
 ### All
 ###############################################################################
 
+#__all__ = ['sys', 'os', 'glob', 'np', 'plt', 'reload',
+#           'settings', 'io', 'wsp', 'tfs', 
+#           'p3d', 'col', 'te', 'tmr',  'bp', 'ap',
+#           'ano', 'res', 'elx', 'st', 'stw',
+#           'clp', 'rnk', 'se', 'dif', 'skl', 'skp', 'vf',
+#           'grp', 'gp', 'me', 'mr', 'vox',
+#           'vasc', 'cells'];
 __all__ = ['sys', 'os', 'glob', 'np', 'plt', 'reload',
            'settings', 'io', 'wsp', 'tfs', 
            'p3d', 'col', 'te', 'tmr',  'bp', 'ap',
            'ano', 'res', 'elx', 'st', 'stw',
            'clp', 'rnk', 'se', 'dif', 'skl', 'skp', 'vf',
-           'grp', 'gp', 'me', 'mr', 'vox',
            'vasc', 'cells'];
