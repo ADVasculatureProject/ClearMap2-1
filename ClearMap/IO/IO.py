@@ -35,7 +35,7 @@ import ClearMap.IO.NPY as npy
 import ClearMap.IO.MMP as mmp
 import ClearMap.IO.SMA as sma
 import ClearMap.IO.MHD as mhd
-import ClearMap.IO.GT as gt
+#import ClearMap.IO.GT as gt
 import ClearMap.IO.FileList as fl
 import ClearMap.IO.FileUtils as fu
 
@@ -57,10 +57,12 @@ from ClearMap.IO.FileUtils import (is_file, is_directory, file_extension,   #ana
 ### Source associations 
 ###############################################################################
 
-source_modules = [npy, tif, mmp, sma, fl, nrrd, csv, gt];
+#source_modules = [npy, tif, mmp, sma, fl, nrrd, csv, gt];
+source_modules = [npy, tif, mmp, sma, fl, nrrd, csv];
 """The valid source modules."""
 
-file_extension_to_module = {"npy" : mmp, "tif" : tif, 'nrrd' : nrrd, 'nrdh' : nrrd, 'csv' : csv, 'gt' : gt};
+#file_extension_to_module = {"npy" : mmp, "tif" : tif, 'nrrd' : nrrd, 'nrdh' : nrrd, 'csv' : csv, 'gt' : gt};
+file_extension_to_module = {"npy" : mmp, "tif" : tif, 'nrrd' : nrrd, 'nrdh' : nrrd, 'csv' : csv};
 """Map between file extensions and modules that handle this file type."""        
 
 ###############################################################################
