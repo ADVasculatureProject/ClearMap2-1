@@ -168,6 +168,134 @@ class LUT(pg.QtGui.QWidget):
 ###  DataViewer
 ############################################################################################################
 
+#import pyqtgraph as pg
+#X = pg.QtGui.QWidget(); 
+#X.show()
+#X.resize(1600,1200)
+#
+#layout = pg.QtGui.QGridLayout(X)
+#layout.setContentsMargins(0,0,0,0)  
+#
+#X.view = pg.ViewBox();
+#X.view.setAspectLocked(True); 
+#
+#X.graphicsView = pg.GraphicsView()
+#X.graphicsView.setObjectName("GraphicsView")
+#X.graphicsView.setCentralItem(X.view)
+#
+#splitter = pg.QtGui.QSplitter();
+#splitter.setOrientation(pg.QtCore.Qt.Horizontal)
+#splitter.setSizes([X.width() - 10, 10]);
+#layout.addWidget(splitter);
+#
+#image_splitter = pg.QtGui.QSplitter();
+#image_splitter.setOrientation(pg.QtCore.Qt.Vertical)
+#image_splitter.setSizePolicy(pg.QtGui.QSizePolicy.Expanding, pg.QtGui.QSizePolicy.Expanding)
+#
+#
+#import numpy as np
+#img1 = np.random.rand(*(100,80,30));
+#X.sources = '/media/user/Daten 1/HuTestFiles/binary.npy'
+#
+#image_options = dict(clipToView = True, autoDownsample = True, autoLevels = False, useOpenGL = None);
+#X.image_items = [pg.ImageItem(img1, **image_options)]
+#for i in X.image_items:
+#  i.setRect(pg.QtCore.QRect(0, 0, 80, 80))
+#  i.setCompositionMode(pg.QtGui.QPainter.CompositionMode_Plus);
+#  X.view.addItem(i);
+#X.view.setXRange(0, 80);
+#X.view.setYRange(0, 80);
+#
+#X.slicePlot = pg.PlotWidget()
+#sizePolicy = pg.QtGui.QSizePolicy(pg.QtGui.QSizePolicy.Preferred, pg.QtGui.QSizePolicy.Preferred)
+#sizePolicy.setHorizontalStretch(0)
+#sizePolicy.setVerticalStretch(0)
+#sizePolicy.setHeightForWidth(X.slicePlot.sizePolicy().hasHeightForWidth())
+#X.slicePlot.setSizePolicy(sizePolicy)
+#X.slicePlot.setMinimumSize(pg.QtCore.QSize(0, 40))
+#X.slicePlot.setObjectName("roiPlot");    
+#
+#X.sliceLine = pg.InfiniteLine(0, movable=True)
+#X.sliceLine.setPen((255, 255, 255, 200))
+#X.sliceLine.setZValue(1)
+#X.slicePlot.addItem(X.sliceLine)
+#X.slicePlot.hideAxis('left')
+#
+##X.updateSlicer();
+##
+##X.sliceLine.sigPositionChanged.connect(X.updateSlice)
+#
+## Axis Tools
+#axis_tools_layout = pg.QtGui.QGridLayout()
+#X.axis_buttons = [];
+#axesnames = ['x', 'y', 'z'];
+##for d in range(3):
+##  button = pg.QtGui.QRadioButton(axesnames[d]);
+##  button.setMaximumWidth(50);
+##  axis_tools_layout.addWidget(button,0,d);
+##  button.clicked.connect(ft.partial(X.setSliceAxis, d));
+##  X.axis_buttons.append(button);
+##X.axis_buttons[X.source_axis].setChecked(True);
+#axis_tools_widget = pg.QtGui.QWidget();
+#axis_tools_widget.setLayout(axis_tools_layout);
+##print('axis')
+#
+## coordinate label
+#X.source_pointer = [0,0,0];
+#X.source_label = pg.QtGui.QLabel("");
+#axis_tools_layout.addWidget(X.source_label,0,3);
+#
+##X.graphicsView.scene().sigMouseMoved.connect(X.updateLabelFromMouseMove);
+###print('coords')
+#
+##compose the image viewer
+#image_splitter.addWidget(X.graphicsView);
+#image_splitter.addWidget(X.slicePlot)
+#image_splitter.addWidget(axis_tools_widget); 
+#image_splitter.setSizes([X.height()-35-20, 35, 20])
+##print('viewer')
+#
+## lut widgets
+##    if X.nsources == 1:
+#cols = ['flame'];
+#
+#X.luts = [LUT(image = i, color = c) for i,c in zip(X.image_items, cols)];
+#
+#lut_layout = pg.QtGui.QGridLayout();
+#
+#lut_layout.setContentsMargins(0,0,0,0);
+#for d,l in enumerate(X.luts):
+#  lut_layout.addWidget(l,0,d);  
+#lut_widget = pg.QtGui.QWidget();
+#lut_widget.setLayout(lut_layout);
+#lut_widget.setContentsMargins(0,0,0,0);
+##lut_widget.setSizePolicy(pg.QtGui.QSizePolicy.Maximum, pg.QtGui.QSizePolicy.Expanding)
+#lut_widget.setSizePolicy(pg.QtGui.QSizePolicy.Preferred, pg.QtGui.QSizePolicy.Expanding)
+#
+#
+#
+##splitter.addWidget(lut_widget);
+#
+#splitter.setStretchFactor(0, 1);
+#splitter.setStretchFactor(1, 0);
+#
+##self.source_levelMin = [];
+##self.source_levelMax = [];
+##for i,s in enumerate(self.sources):
+##  lmin, lmax = list(map(float, self.quickMinMax(s[self.source_slice])));
+##  self.levelMin.append(lmin);
+##  self.levelMax.append(lmax); 
+##print('lut')
+#
+## update scale
+#for l in X.luts:
+#  l.range_buttons[1][2].click();
+#if minMax is not None:
+#  X.setMinMax(minMax);
+# 
+#X.show();
+
+
 
 class DataViewer(pg.QtGui.QWidget):
   def __init__(self, source, axis = None, scale = None, title = None, invertY = False, minMax = None, screen = None, parent = None, *args):
@@ -298,7 +426,7 @@ class DataViewer(pg.QtGui.QWidget):
     lut_widget.setContentsMargins(0,0,0,0);
     #lut_widget.setSizePolicy(pg.QtGui.QSizePolicy.Maximum, pg.QtGui.QSizePolicy.Expanding)
     lut_widget.setSizePolicy(pg.QtGui.QSizePolicy.Preferred, pg.QtGui.QSizePolicy.Expanding)
-    splitter.addWidget(lut_widget);
+#    splitter.addWidget(lut_widget);
     
     splitter.setStretchFactor(0, 1);
     splitter.setStretchFactor(1, 0);
@@ -330,9 +458,9 @@ class DataViewer(pg.QtGui.QWidget):
     self.sources  = [io.as_source(s) for s in source];
     
     # avoid bools
-    #for i,s in enumerate(self.sources):
-    #  if s.dtype == bool:
-    #    self.sources[i] = s.view('uint8');
+    for i,s in enumerate(self.sources):
+      if s.dtype == bool:
+        self.sources[i] = s.view('uint8');
      
     # # ensure 3d images 
     # for i,s in enumerate(self.sources):

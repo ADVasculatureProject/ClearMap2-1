@@ -69,6 +69,18 @@ def plot_graph_mesh(graph, view = None,
   return p;
 
 
+
+#graph = graph_raw,
+#view = None, 
+#coordinates = None,
+#color = None,
+#edge_colors = None,
+#vertex_colors = None,
+#width = None,
+#mode = 'gl',
+#center_view = True,
+#title = None
+
 def plot_graph_line(graph, view = None, 
                     coordinates = None,
                     color = None, edge_colors = None, vertex_colors = None,

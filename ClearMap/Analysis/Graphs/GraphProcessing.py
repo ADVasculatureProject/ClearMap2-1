@@ -96,7 +96,7 @@ def graph_from_skeleton(skeleton, points = None, radii = None, vertex_coordinate
   #detect edges
   edges_all = np.zeros((0,2), dtype = int);
   for i,o in enumerate(t3d.orientations()):
-    # calculate off set
+    # calculate offset
     offset = np.sum((np.hstack(np.where(o))-[1,1,1]) * skeleton.strides) 
     edges = ap.neighbours(points, offset);
     if len(edges) > 0:

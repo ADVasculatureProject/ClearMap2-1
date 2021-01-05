@@ -48,21 +48,25 @@ def track_positions(positions, new_trajectory_cost = None, cutoff = None):
   A shortest augmenting path algorithm for dense and sparse linear assignment problems
   Jonker, R, Volgenant, A, Computing 1987  
   """
-  
   #positions: list of list of tuples of of minima [[(min_x1,1,min_y1,2,...),...], [(min_x2,1,...),...],...])
   n_steps = len(positions)-1;
-  
   #match steps
-  matches = [match(positions[i], positions[i+1], new_trajectory_cost=new_trajectory_cost, cutoff=cutoff) for i in range(n_steps)];
+  matches = [0]*n_steps
+  for i in range(n_steps):
+#      print(i,n_steps)
+#      print(positions[i])
+#      print(positions[i+1])
+      matches[i] = match(positions[i], positions[i+1], new_trajectory_cost=new_trajectory_cost, cutoff=cutoff)
   
+#  matches = [match(positions[i], positions[i+1], new_trajectory_cost=new_trajectory_cost, cutoff=cutoff) for i in range(n_steps)];
   #build trajectories
   n_pre = len(positions[0]);
   trajectories = [[(0,i)] for i in range(n_pre)];
-  active = [i for i in range(n_pre)];                          
-  for t in range(1, n_steps+1):   
+  active = [i for i in range(n_pre)]; 
+  for t in range(1, n_steps+1):
+      
     #n_pre = len(positions[t]);
     n_post = len(positions[t]);
-     
     pre = [trajectories[a][-1][1] for a in active];
     m = matches[t-1];
     #if len(active) != len(positions[t-1]):
@@ -123,18 +127,13 @@ def match(positions_pre, positions_post, new_trajectory_cost = None, cutoff = No
   """
   #create distance matrices
   cost = ssd.cdist(positions_pre, positions_post);
-  
   if cutoff:
     cost[cost > cutoff] = np.inf;
-
   if new_trajectory_cost is None:
     new_trajectory_cost = np.max(cost) + 1.0;
-  
   cost = np.pad(cost, [(0,1), (0,1)], 'constant', constant_values = new_trajectory_cost);
-  
   #match points
   A = optimal_association_matrix(cost);
-  
   return { i : j for i,j in zip(*np.where(A[:-1,:]))}
   
 
@@ -168,8 +167,12 @@ def optimal_association_matrix(cost):
   Cs = np.where(cost[:-1,:-1].flatten()<np.inf);
                            
   finished = False;
+#  counter = 0
   while not finished:
+#    counter += 1
+#    print(counter)
     A, finished = _do_one_move(A, cost, Cs);
+#    plt.imshow(A); plt.show()
                              
   return A;
 
@@ -249,25 +252,25 @@ def _do_one_move(A, C, Cs):
 ###############################################################################
 
 def _test():
-  import ClearMap.Alignment.Tracking as trk
+  import ClearMap.Alignment.Stitching.Tracking as trk
   from importlib import reload
   reload(trk)
 
-  import ClearMap.Alignment.StitchingWobbly as stw
+  import ClearMap.Alignment.Stitching.StitchingWobbly as stw
   
   positions = [[(5,6),(10,10)], [(5,7), (11,10),(30,10)],[(9,10),(31,9)]]
   
-  tr = trk.track_positions(positions, creation_destruction_cost = None, cutoff = None)
+  tr = trk.track_positions(positions, new_trajectory_cost = None, cutoff = None)
   
   
   # realistic test
   positions = [stw.detect_local_minima(c, distance = 1)[0] for c in correlation.transpose([2,0,1])]
   positions = positions[1230:];
 
-  k = 20;
-  plt.figure(1); plt.clf();
-  plt.imshow(correlation[:,:,k].T, origin='lower')
-  plt.plot([p[0] for p in positions[k]],[p[1] for p in positions[k]], '*', c='r')
+#  k = 20;
+#  plt.figure(1); plt.clf();
+#  plt.imshow(correlation[:,:,k].T, origin='lower')
+#  plt.plot([p[0] for p in positions[k]],[p[1] for p in positions[k]], '*', c='r')
   
   
   tr = trk.track_positions(positions, creation_destruction_cost = np.sqrt(np.sum(np.power(correlation[:,:,0].shape, 2))), cutoff = np.sqrt(2 * 3**2))

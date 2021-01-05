@@ -1023,6 +1023,7 @@ def align_layout(layout, axis_range = None, max_shifts = 10, axis_mip = None,
   if processes == 'serial':
     results = [_align(a.pre, a.post) for a in alignments];
   else:
+#    processes_to_use = np.minimum(len(layout.alignments),processes)
     layout.sources_as_virtual();
     with concurrent.futures.ProcessPoolExecutor(processes) as executor:
       results = executor.map(_align, [a.pre for a in alignments], [a.post for a in alignments]);
@@ -1185,12 +1186,12 @@ def align_wobbly_axis(source1, source2, axis = 2, axis_range = None, max_shifts 
       i1rawa = i1raw[slice1_a];
       valid = _validate(i1rawa, **validate_slice);
       if verbose and not valid:
-        print('Alignment: Slice %d with coordainte %d in source %r is not valid!' % (a - a_start, a, source1.identifier)); 
+        print('Alignment: Slice %d with coordinate %d in source %r is not valid!' % (a - a_start, a, source1.identifier)); 
       if valid:
         i2rawa = i2raw[slice2_a];
         valid = _validate(i2rawa, **validate_slice);
         if verbose and not valid:
-          print('Alignment: Slice %d with coordainte %d in source %r is not valid!' % (a - a_start, a, source2.identifier)); 
+          print('Alignment: Slice %d with coordinate %d in source %r is not valid!' % (a - a_start, a, source2.identifier)); 
       if not valid:
         status[i] = WobblyAlignment.NOSIGNAL;
         continue;                        
@@ -1359,7 +1360,7 @@ def shifts_from_tracing(errors, status, cutoff=None, new_trajectory_cost=None, m
   measured = np.where(status == WobblyAlignment.MEASURED)[0];
   if len(measured) == 0:
     return shifts, qualities, status;
-                           
+         
   #minima detection
   mins = [_detect_minima(error, method=minima, **kwargs) for error in errors[measured]];             
   
@@ -1386,16 +1387,18 @@ def shifts_from_tracing(errors, status, cutoff=None, new_trajectory_cost=None, m
      new_trajectory_cost = np.sqrt(np.sum(np.power(errors[0].shape, 2)));
 
   n_measured = 0;
+  
   for s,e in zip(starts, ends):
+    
     #account for subsampling
     measured_se = np.where(measured[s:e])[0];
-    n_measured_se = len(measured_se);                    
+    n_measured_se = len(measured_se);    
     if n_measured_se == 0:
       continue;
                  
     positions = [mins[i][0] for i in range(n_measured, n_measured + n_measured_se)];
     n_measured += n_measured_se;
-    
+#    print(positions)
     trajectories = trk.track_positions(positions, new_trajectory_cost=new_trajectory_cost, cutoff=cutoff)
     
     if verbose.has_flag('figure'):
@@ -1438,6 +1441,7 @@ def shifts_from_tracing(errors, status, cutoff=None, new_trajectory_cost=None, m
         break;
     
     if verbose.has_flag('figure'):
+      import matplotlib.pyplot as plt
       fig = plt.figure(201); plt.clf();
       fig.gca(projection='3d') 
       for t in t_opt:
@@ -1590,7 +1594,7 @@ def place_layout(layout, min_quality = None, method = 'optimization',
   alignment_pairs = np.array([(source_to_index[a.pre], source_to_index[a.post]) for a in alignments]);
   n_alignments = len(alignment_pairs);
   ndim = len(positions[0]);
-            
+  
   #displacmeents and qualities
   displacements = np.full((n_slices, n_alignments, ndim), np.nan);
   qualities = np.full((n_slices, n_alignments), -np.inf);  
@@ -1640,7 +1644,8 @@ def place_layout(layout, min_quality = None, method = 'optimization',
   for s,components_slice in enumerate(components):
     for c in components_slice:
       if len(c) == 1:
-        layout.sources[c[0]].set_isolated(coordinate = s); 
+        layout.sources[c[0]].set_isolated(coordinate = s);
+  # if len(layout.alignments) > 1:
   components = [[c for c in components_slice if len(c) > 1] for components_slice in components];              
   
   #optimize positions
